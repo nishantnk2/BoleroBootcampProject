@@ -1,19 +1,17 @@
 package com.nk2.crudapp.controller;
 
 import com.nk2.crudapp.entity.Department;
-import com.nk2.crudapp.entity.Employee;
 import com.nk2.crudapp.repository.DepartmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class DepartmentConroller {
+public class DepartmentController {
     @Autowired
     private DepartmentRepo departmentRepo;
 
