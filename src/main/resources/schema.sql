@@ -1,0 +1,28 @@
+CREATE SEQUENCE SEQ_EMPLOYEE_ID
+    START WITH 1
+    INCREMENT BY 1;
+
+CREATE SEQUENCE SEQ_DEPARTMENT_ID
+    START WITH 1
+    INCREMENT BY 1;
+
+CREATE TABLE EMPLOYEE (
+                          ID INT DEFAULT NEXTVAL('SEQ_EMPLOYEE_ID') PRIMARY KEY,
+                          NAME_FIRST  VARCHAR(255) NOT NULL,
+                          NAME_LAST   VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE DEPARTMENT(
+                           ID INT DEFAULT NEXTVAL('SEQ_DEPARTMENT_ID') PRIMARY KEY,
+                           NAME VARCHAR(255) NOT NULL,
+                           MANDATORY BOOLEAN NOT NULL,
+                           READ_ONLY BOOLEAN NOT NULL
+);
+
+CREATE TABLE MAP_EMPLOYEE_DEPARTMENT (
+                                         ID_EMPLOYEE INT NOT NULL,
+                                         ID_DEPARTMENT INT NOT NULL,
+                                         PRIMARY KEY (ID_EMPLOYEE, ID_DEPARTMENT),
+                                         CONSTRAINT FK_EMPLOYEE FOREIGN KEY (ID_EMPLOYEE) REFERENCES EMPLOYEE(ID),
+                                         CONSTRAINT FK_DEPARTMENT FOREIGN KEY (ID_DEPARTMENT) REFERENCES DEPARTMENT(ID)
+);
