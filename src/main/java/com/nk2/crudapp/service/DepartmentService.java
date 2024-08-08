@@ -17,43 +17,39 @@ public class DepartmentService implements OperationService<Department> {
     private DepartmentRepo departmentRepo;
 
     @Override
-    public Department add(Department obj) {
+    public Department save(Department obj) {
         return departmentRepo.save(obj);
     }
 
     @Override
-    public Department update(Department obj) {
+    public Department update(Department obj) throws Exception {
         Optional<Department> dept = departmentRepo.findById(obj.getId());
         if(dept.isEmpty()) {
-            System.out.println("Department not found");
-            return null;
+            throw new Exception("Department is not available");
         }
 
         if(dept.get().isReadOnly() && obj.isReadOnly())
         {
-            System.out.println("Department is read-only. Can't update.");
-            return null;
+            throw new Exception("Department is read-only. Can't update.");
         }
 
         return departmentRepo.save(obj);
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(int id) throws Exception {
         Optional<Department> dept = departmentRepo.findById(id);
         if(dept.isEmpty()) {
-            System.out.println("Department not found");
-            return;
+            throw new Exception("Department is not available");
         }
-
-        if(dept.get().isReadOnly())
+        Department department = departmentRepo.findById(id).get();
+        if(department.isReadOnly())
         {
-            System.out.println("Department is read-only. Can not delete.");
-            return;
+            throw new Exception("Department is read-only. Can't delete.");
         }
 
-        Set<Employee> employeeList = dept.get().getEmployeeSet();
-        employeeList.remove(dept.get());
+        Set<Employee> employeeList = department.getEmployees();
+        employeeList.remove(department);
         departmentRepo.deleteById(id);
     }
 
@@ -63,7 +59,7 @@ public class DepartmentService implements OperationService<Department> {
     }
 
     @Override
-    public Optional<Department> getById(int id) {
-        return departmentRepo.findById(id);
+    public Department getById(int id) {
+        return departmentRepo.findById(id).orElse(null);
     }
 }

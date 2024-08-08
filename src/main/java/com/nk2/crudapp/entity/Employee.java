@@ -19,19 +19,19 @@ public class Employee {
     private int id;
 
     @NotNull(message = "FIRSTNAME cannot be null")
-    @Column(name = "NAME_FIRST", nullable = false)
-    private String firstName;
+    @Column(nullable = false)
+    private String nameFirst;
 
     @NotNull(message = "LASTNAME cannot be null")
-    @Column(name = "NAME_LAST", nullable = false)
-    private String lastName;
+    @Column(nullable = false)
+    private String nameLast;
 
     @NotNull(message = "DEPARTMENT cannot be null")
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             name = "MAP_EMPLOYEE_DEPARTMENT",
             joinColumns = @JoinColumn(name = "ID_EMPLOYEE"),
             inverseJoinColumns = @JoinColumn(name = "ID_DEPARTMENT")
     )
-    private Set<Department> departmentSet;
+    private Set<Department> departments;
 }

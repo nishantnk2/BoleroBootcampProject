@@ -8,10 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +22,9 @@ public class EmployeeService implements OperationService<Employee> {
     private DepartmentRepo departmentRepo;
 
     @Override
-    public Employee add(Employee obj) {
-        Set<Department> fetchedDepartments = validateDepartmentsExistence(obj.getDepartmentSet());
-        addDepartments(obj, fetchedDepartments);
+    public Employee save(Employee obj) throws Exception {
+        validateDepartmentsExistence(obj);
+        saveMandatoryDepartments(obj);
         return employeeRepo.save(obj);
     }
 
@@ -36,15 +34,11 @@ public class EmployeeService implements OperationService<Employee> {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(int id) throws Exception {
         Optional<Employee> emp = employeeRepo.findById(id);
         if(emp.isEmpty()) {
-            return;
+            throw new Exception("Employee id is not available.");
         }
-
-        Set<Department> departmentList = emp.get().getDepartmentSet();
-        departmentList.remove(emp.get());
-
         employeeRepo.deleteById(id);
     }
 
@@ -54,26 +48,23 @@ public class EmployeeService implements OperationService<Employee> {
     }
 
     @Override
-    public Optional<Employee> getById(int id) {
-        return employeeRepo.findById(id);
+    public Employee getById(int id) {
+        return employeeRepo.findById(id).orElse(null);
     }
 
-    private void addDepartments(Employee obj, Set<Department> fetchedDepartments) {
-        Set<Department> mandatoryDepartmentList = departmentRepo.getDepartmentsByMandatoryIsTrue();
-        mandatoryDepartmentList.addAll(fetchedDepartments);
-        obj.setDepartmentSet(mandatoryDepartmentList);
+    private void saveMandatoryDepartments(Employee obj) {
+        obj.getDepartments().addAll(departmentRepo.getDepartmentsByMandatoryIsTrue());
     }
 
-    private Set<Department> validateDepartmentsExistence(Set<Department> departments) {
-        if(departments == null) {
-            return null;
+    private void validateDepartmentsExistence(Employee obj) throws Exception {
+        if(obj.getDepartments() == null) {
+            return;
         }
-        List<Integer> departmentIds = departments.stream().map(Department::getId).toList();
+
+        List<Integer> departmentIds = obj.getDepartments().stream().map(Department::getId).toList();
         List<Department> fetchedDepartments = departmentRepo.findAllById(departmentIds);
-        if(fetchedDepartments.isEmpty() || fetchedDepartments.size() != departments.size()) {
-            System.out.println("Department not found");
-            return null;
+        if(fetchedDepartments.size() != obj.getDepartments().size()) {
+            throw new Exception("Department is not available");
         }
-        return new HashSet<>(fetchedDepartments);
     }
 }
