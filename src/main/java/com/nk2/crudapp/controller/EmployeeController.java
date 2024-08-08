@@ -2,6 +2,8 @@ package com.nk2.crudapp.controller;
 
 import com.nk2.crudapp.entity.Employee;
 import com.nk2.crudapp.repository.EmployeeRepo;
+import com.nk2.crudapp.service.EmployeeService;
+import com.nk2.crudapp.service.OperationService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +17,12 @@ import java.util.Optional;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeRepo employeeRepo;
+    private OperationService<Employee> employeeService;
 
     @GetMapping("/api/employee/getall")
     public ResponseEntity<List<Employee>> getAllEmployees() {
         try {
-            List<Employee> employees = employeeRepo.findAll();
+            List<Employee> employees = employeeService.getAll();
             if(employees.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -33,7 +35,7 @@ public class EmployeeController {
     @GetMapping("/api/employee/getbyid/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable int id) {
         try {
-            Optional<Employee> employee = employeeRepo.findById(id);
+            Optional<Employee> employee = employeeService.getById(id);
             if(employee.isPresent()) {
                 return new ResponseEntity<>(employee.get(), HttpStatus.OK);
             }
@@ -46,7 +48,7 @@ public class EmployeeController {
     @PostMapping("/api/employee/add")
     public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
         try {
-            Employee returnEmp = employeeRepo.save(employee);
+            Employee returnEmp = employeeService.add(employee);
             return new ResponseEntity<>(returnEmp, HttpStatus.CREATED);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -56,12 +58,12 @@ public class EmployeeController {
     @PostMapping("/api/employee/update/{id}")
     public ResponseEntity<Employee> updateEmployeeById(@PathVariable int id, @RequestBody Employee newEmp) {
         try {
-            Optional<Employee> oldEmp = employeeRepo.findById(id);
+            Optional<Employee> oldEmp = employeeService.getById(id);
             if(oldEmp.isPresent()) {
                 Employee emp = oldEmp.get();
                 emp.setFirstName(newEmp.getFirstName());
                 emp.setLastName(newEmp.getLastName());
-                Employee newSavedEmployee = employeeRepo.save(emp);
+                Employee newSavedEmployee = employeeService.update(emp);
                 return new ResponseEntity<>(newSavedEmployee, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -73,7 +75,7 @@ public class EmployeeController {
     @DeleteMapping("/api/employee/delete/{id}")
     public ResponseEntity<Employee> deleteEmployeeById(@PathVariable int id) {
         try {
-            employeeRepo.deleteById(id);
+            employeeService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
