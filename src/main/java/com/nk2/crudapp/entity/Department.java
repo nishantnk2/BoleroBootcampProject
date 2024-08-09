@@ -2,7 +2,9 @@ package com.nk2.crudapp.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
@@ -15,7 +17,7 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DEPARTMENT_ID")
     @SequenceGenerator(name = "SEQ_DEPARTMENT_ID", sequenceName = "SEQ_DEPARTMENT_ID", allocationSize = 1)
-    private int id;
+    private Integer id;
 
     @NotNull(message = "DEPARTMENT NAME cannot be null")
     @Column(nullable = false)

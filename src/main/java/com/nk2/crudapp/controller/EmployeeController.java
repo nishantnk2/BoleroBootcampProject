@@ -11,12 +11,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/employee")
 @Validated
-public class EmployeeController {
+public class EmployeeController{
 
     @Autowired
     private final OperationService<Employee> employeeService;
 
-    public EmployeeController(OperationService<Employee> employeeService) {
+    public EmployeeController(OperationService<Employee> employeeService){
         this.employeeService = employeeService;
     }
 
