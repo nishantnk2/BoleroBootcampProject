@@ -25,12 +25,7 @@ public class DepartmentService implements OperationService<Department> {
 
     @Override
     public Department update(Department obj){
-        if(obj.getId() == null){
-            throw new BadRequestException("Department id is null");
-        }
-
-        Department dept = departmentRepo.findById(obj.getId()).orElseThrow(() -> new ResourceNotFoundException("Department is not available"));
-
+        Department dept = getById(obj.getId());
         if(dept.isReadOnly() && obj.isReadOnly())
         {
             throw new InvalidRequestException("Department is read-only. Can't update.");
@@ -66,6 +61,9 @@ public class DepartmentService implements OperationService<Department> {
 
     @Override
     public Department getById(Integer id) {
+        if(id == null){
+            throw new BadRequestException("Department id is null");
+        }
         return departmentRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Department is not available"));
     }
 }
