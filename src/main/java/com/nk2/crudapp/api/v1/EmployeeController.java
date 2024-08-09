@@ -1,6 +1,7 @@
 package com.nk2.crudapp.api.v1;
 
 import com.nk2.crudapp.entity.Employee;
+import com.nk2.crudapp.exception.CustomException;
 import com.nk2.crudapp.service.OperationService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class EmployeeController{
     }
 
     @GetMapping("/getall")
-    public List<Employee> getAllEmployees() {
+    public List<Employee> getAllEmployees() throws CustomException {
         return employeeService.getAll();
     }
 

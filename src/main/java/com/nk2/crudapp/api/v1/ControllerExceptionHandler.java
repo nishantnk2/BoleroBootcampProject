@@ -1,5 +1,6 @@
 package com.nk2.crudapp.api.v1;
 
+import com.nk2.crudapp.exception.CustomException;
 import com.nk2.crudapp.exception.ErrorMessage;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class ControllerExceptionHandler <T extends Exception> {
        map.put((Class<T>) NullPointerException.class, HttpStatus.INTERNAL_SERVER_ERROR);
        map.put((Class<T>) IllegalArgumentException.class, HttpStatus.BAD_REQUEST);
        map.put((Class<T>) NoResourceFoundException.class, HttpStatus.NOT_FOUND);
+       map.put((Class<T>) CustomException.class, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

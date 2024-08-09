@@ -2,6 +2,7 @@ package com.nk2.crudapp.service;
 
 import com.nk2.crudapp.entity.Department;
 import com.nk2.crudapp.entity.Employee;
+import com.nk2.crudapp.exception.CustomException;
 import com.nk2.crudapp.repository.DepartmentRepo;
 import com.nk2.crudapp.repository.EmployeeRepo;
 import lombok.RequiredArgsConstructor;
@@ -47,10 +48,10 @@ public class EmployeeService implements OperationService<Employee> {
     }
 
     @Override
-    public List<Employee> getAll() {
+    public List<Employee> getAll() throws CustomException {
         List<Employee> employees = employeeRepo.findAll();
         if(employees.isEmpty()) {
-            throw new NoSuchElementException("Employee list is empty.");
+            throw new CustomException("Employee list is empty.");
         }
         return employees;
     }
