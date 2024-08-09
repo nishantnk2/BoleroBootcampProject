@@ -20,15 +20,15 @@ public class Department {
     private Integer id;
 
     @NotNull(message = "DEPARTMENT NAME cannot be null")
-    @Column(nullable = false)
+    @Column(name = "NAME", nullable = false)
     private String name;
 
     @NotNull(message = "MANDATORY field cannot be null")
-    @Column(nullable = false)
+    @Column(name = "MANDATORY", nullable = false)
     private boolean mandatory;
 
     @NotNull(message = "READONLY field cannot be null")
-    @Column(nullable = false)
+    @Column(name = "READ_ONLY", nullable = false)
     private boolean readOnly;
 
     @ManyToMany(mappedBy = "departments")

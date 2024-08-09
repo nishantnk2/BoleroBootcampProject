@@ -21,11 +21,11 @@ public class Employee {
     private Integer id;
 
     @NotNull(message = "FIRSTNAME cannot be null")
-    @Column(nullable = false)
+    @Column(name= "NAME_FIRST", nullable = false)
     private String nameFirst;
 
     @NotNull(message = "LASTNAME cannot be null")
-    @Column(nullable = false)
+    @Column(name= "NAME_LAST", nullable = false)
     private String nameLast;
 
     @NotNull(message = "DEPARTMENT cannot be null")
