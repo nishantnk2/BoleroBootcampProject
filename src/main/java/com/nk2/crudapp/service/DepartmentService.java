@@ -37,7 +37,7 @@ public class DepartmentService implements OperationService<Department> {
     }
 
     @Override
-    public void deleteById(int id) throws Exception {
+    public void deleteById(Integer id) throws Exception {
         Optional<Department> dept = departmentRepo.findById(id);
         if(dept.isEmpty()) {
             throw new Exception("Department is not available");
@@ -49,7 +49,10 @@ public class DepartmentService implements OperationService<Department> {
         }
 
         Set<Employee> employeeList = department.getEmployees();
-        employeeList.remove(department);
+        for (Employee employee : employeeList) {
+            employee.getDepartments().remove(department);
+        }
+
         departmentRepo.deleteById(id);
     }
 
@@ -59,7 +62,7 @@ public class DepartmentService implements OperationService<Department> {
     }
 
     @Override
-    public Department getById(int id) {
+    public Department getById(Integer id) {
         return departmentRepo.findById(id).orElse(null);
     }
 }

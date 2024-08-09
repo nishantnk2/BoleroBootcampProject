@@ -23,7 +23,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/getbyid/{id}")
-    public Department getDepartmentById(@PathVariable int id) {
+    public Department getDepartmentById(@PathVariable Integer id) {
         return departmentService.getById(id);
     }
 
@@ -38,7 +38,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteDepartment(@PathVariable int id) throws Exception {
+    public void deleteDepartment(@PathVariable Integer id) throws Exception {
         departmentService.deleteById(id);
     }
 }

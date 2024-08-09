@@ -34,7 +34,7 @@ public class EmployeeService implements OperationService<Employee> {
     }
 
     @Override
-    public void deleteById(int id) throws Exception {
+    public void deleteById(Integer id) throws Exception {
         Optional<Employee> emp = employeeRepo.findById(id);
         if(emp.isEmpty()) {
             throw new Exception("Employee id is not available.");
@@ -48,7 +48,7 @@ public class EmployeeService implements OperationService<Employee> {
     }
 
     @Override
-    public Employee getById(int id) {
+    public Employee getById(Integer id) {
         return employeeRepo.findById(id).orElse(null);
     }
 

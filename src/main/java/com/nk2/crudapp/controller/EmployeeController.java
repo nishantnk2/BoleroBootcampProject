@@ -26,7 +26,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/getbyid/{id}")
-    public Employee getEmployeeById(@PathVariable int id) {
+    public Employee getEmployeeById(@PathVariable Integer id) {
         return employeeService.getById(id);
     }
 
@@ -41,7 +41,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteEmployeeById(@PathVariable int id) throws Exception {
+    public void deleteEmployeeById(@PathVariable Integer id) throws Exception {
         employeeService.deleteById(id);
     }
 
