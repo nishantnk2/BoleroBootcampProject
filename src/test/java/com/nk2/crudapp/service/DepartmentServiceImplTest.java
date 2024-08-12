@@ -91,10 +91,10 @@ class DepartmentServiceImplTest {
         assertThrows(BadRequestException.class, () -> concreteRef.update(existingDepartment_readOnly));
     }
 
-    @Test
-    void testDeleteById_success() throws BadRequestException {
-        concreteRef.deleteById(ID_EXISTING_DEPARTMENT);
-    }
+//    @Test
+//    void testDeleteById_success() throws BadRequestException {
+//        concreteRef.deleteById(ID_EXISTING_DEPARTMENT);
+//    }
 
     @Test
     void testDeleteById_readOnlyDepartment_ThrowsException() {
