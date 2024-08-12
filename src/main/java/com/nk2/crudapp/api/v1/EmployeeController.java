@@ -3,6 +3,7 @@ package com.nk2.crudapp.api.v1;
 import com.nk2.crudapp.entity.Employee;
 import com.nk2.crudapp.exception.CustomException;
 import com.nk2.crudapp.service.OperationService;
+import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -33,12 +34,12 @@ public class EmployeeController {
     }
 
     @PostMapping("/add")
-    public Employee saveEmployee(@RequestBody Employee employee) {
+    public Employee saveEmployee(@Valid @RequestBody Employee employee) {
         return employeeServiceImpl.save(employee);
     }
 
     @PostMapping("/update")
-    public Employee updateEmployee(@RequestBody Employee newEmp) throws BadRequestException {
+    public Employee updateEmployee(@Valid @RequestBody Employee newEmp) throws BadRequestException {
         return employeeServiceImpl.update(newEmp);
     }
 

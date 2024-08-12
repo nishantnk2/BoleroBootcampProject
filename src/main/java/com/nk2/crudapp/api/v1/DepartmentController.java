@@ -3,6 +3,7 @@ package com.nk2.crudapp.api.v1;
 import com.nk2.crudapp.entity.Department;
 import com.nk2.crudapp.exception.CustomException;
 import com.nk2.crudapp.service.OperationService;
+import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +31,12 @@ public class DepartmentController {
     }
 
     @PostMapping("/add")
-    public Department saveDepartment(@RequestBody Department department) {
+    public Department saveDepartment(@Valid @RequestBody Department department) {
         return departmentServiceImpl.save(department);
     }
 
     @PostMapping("/update")
-    public Department updateDepartmentById(@RequestBody Department department) throws BadRequestException {
+    public Department updateDepartmentById(@Valid @RequestBody Department department) throws BadRequestException {
         return departmentServiceImpl.update(department);
     }
 
