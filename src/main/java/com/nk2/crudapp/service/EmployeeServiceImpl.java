@@ -3,8 +3,8 @@ package com.nk2.crudapp.service;
 import com.nk2.crudapp.entity.Department;
 import com.nk2.crudapp.entity.Employee;
 import com.nk2.crudapp.exception.CustomException;
-import com.nk2.crudapp.repository.DepartmentRepo;
-import com.nk2.crudapp.repository.EmployeeRepo;
+import com.nk2.crudapp.repository.DepartmentRepository;
+import com.nk2.crudapp.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +19,16 @@ import java.util.NoSuchElementException;
 public class EmployeeServiceImpl implements OperationService<Employee> {
 
     @Autowired
-    private EmployeeRepo employeeRepo;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
-    private DepartmentRepo departmentRepo;
+    private DepartmentRepository departmentReposiroty;
 
     @Override
     public Employee save(Employee employee) {
         validateDepartmentsExistence(employee);
         saveMandatoryDepartments(employee);
-        return employeeRepo.save(employee);
+        return employeeRepository.save(employee);
     }
 
     @Override
@@ -36,19 +36,19 @@ public class EmployeeServiceImpl implements OperationService<Employee> {
         if (employee.getId() == null) {
             throw new BadRequestException("Employee id is required");
         }
-        employeeRepo.findById(employee.getId()).orElseThrow(() -> new NoSuchElementException("Employee id not found"));
-        return employeeRepo.save(employee);
+        employeeRepository.findById(employee.getId()).orElseThrow(() -> new NoSuchElementException("Employee id not found"));
+        return employeeRepository.save(employee);
     }
 
     @Override
     public void deleteById(Integer id) {
-        employeeRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Employee is not available"));
-        employeeRepo.deleteById(id);
+        employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Employee is not available"));
+        employeeRepository.deleteById(id);
     }
 
     @Override
     public List<Employee> getAll() throws CustomException {
-        List<Employee> employees = employeeRepo.findAll();
+        List<Employee> employees = employeeRepository.findAll();
         if (employees.isEmpty()) {
             throw new CustomException("Employee list is empty.");
         }
@@ -57,11 +57,11 @@ public class EmployeeServiceImpl implements OperationService<Employee> {
 
     @Override
     public Employee getById(Integer id) {
-        return employeeRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Employee is not available"));
+        return employeeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Employee is not available"));
     }
 
     private void saveMandatoryDepartments(Employee employee) {
-        employee.getDepartments().addAll(departmentRepo.getDepartmentsByMandatoryIsTrue());
+        employee.getDepartments().addAll(departmentReposiroty.getDepartmentsByMandatoryIsTrue());
     }
 
     private void validateDepartmentsExistence(Employee employee) {
@@ -71,7 +71,7 @@ public class EmployeeServiceImpl implements OperationService<Employee> {
         }
 
         List<Integer> inputDepartmentIds = employee.getDepartments().stream().map(Department::getId).toList();
-        List<Department> dbDepartmentIds = departmentRepo.findAllById(inputDepartmentIds);
+        List<Department> dbDepartmentIds = departmentReposiroty.findAllById(inputDepartmentIds);
         if (dbDepartmentIds.size() != employee.getDepartments().size()) {
             throw new NoSuchElementException("Department is not available");
         }

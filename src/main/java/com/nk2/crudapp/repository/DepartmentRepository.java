@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DepartmentRepo extends JpaRepository<Department, Integer> {
+public interface DepartmentRepository extends JpaRepository<Department, Integer> {
     List<Department> getDepartmentsByMandatoryIsTrue();
 }

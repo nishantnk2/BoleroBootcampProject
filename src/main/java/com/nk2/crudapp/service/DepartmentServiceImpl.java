@@ -2,7 +2,7 @@ package com.nk2.crudapp.service;
 
 import com.nk2.crudapp.entity.Department;
 import com.nk2.crudapp.entity.Employee;
-import com.nk2.crudapp.repository.DepartmentRepo;
+import com.nk2.crudapp.repository.DepartmentRepository;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ import java.util.Set;
 public class DepartmentServiceImpl implements OperationService<Department> {
 
     @Autowired
-    private DepartmentRepo departmentRepo;
+    private DepartmentRepository departmentRepository;
 
     @Override
     public Department save(Department department) {
-        return departmentRepo.save(department);
+        return departmentRepository.save(department);
     }
 
     @Override
@@ -29,12 +29,12 @@ public class DepartmentServiceImpl implements OperationService<Department> {
             throw new BadRequestException("Department is read-only. Can't update.");
         }
 
-        return departmentRepo.save(department);
+        return departmentRepository.save(department);
     }
 
     @Override
     public void deleteById(Integer id) throws BadRequestException {
-        Department department = departmentRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Department id is not available"));
+        Department department = departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Department id is not available"));
 
         if (department.isReadOnly()) {
             throw new BadRequestException("Department is read-only. Can't delete.");
@@ -44,12 +44,12 @@ public class DepartmentServiceImpl implements OperationService<Department> {
         for (Employee employee : employees) {
             employee.getDepartments().remove(department);
         }
-        departmentRepo.deleteById(id);
+        departmentRepository.deleteById(id);
     }
 
     @Override
     public List<Department> getAll() {
-        List<Department> departments = departmentRepo.findAll();
+        List<Department> departments = departmentRepository.findAll();
         if (departments.isEmpty()) {
             throw new NoSuchElementException("Department list is empty.");
         }
@@ -58,6 +58,6 @@ public class DepartmentServiceImpl implements OperationService<Department> {
 
     @Override
     public Department getById(Integer id) {
-        return departmentRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Department is not available"));
+        return departmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Department is not available"));
     }
 }
