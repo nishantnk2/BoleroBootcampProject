@@ -127,6 +127,6 @@ class DepartmentServiceImplTest {
 
     @Test
     void testGetById_departmentRequested_invalidDepartment_ThrowsException() {
-        assertThrows(NoSuchElementException.class, ()-> concreteRef.getById(EmployeeServiceImplTest.ID_INVALID_DEPARTMENT));
+        assertThrows(NoSuchElementException.class, () -> concreteRef.getById(EmployeeServiceImplTest.ID_INVALID_DEPARTMENT));
     }
 }
