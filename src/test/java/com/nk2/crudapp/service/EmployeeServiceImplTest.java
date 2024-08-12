@@ -9,9 +9,10 @@ import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class EmployeeServiceImplTest {
 
     @Mock
@@ -71,8 +73,6 @@ class EmployeeServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-
         validDepartment = Department.builder().id(ID_VALID_DEPARTMENT).name(NAME_VALID_DEPARTMENT).build();
         validDepartment_readOnly_mandatory = Department.builder().id(ID_VALID_DEPARTMENT_READONLY_MANDATORY).name(NAME_VALID_DEPARTMENT_READONLY_MANDATORY).readOnly(true).mandatory(true).build();
         validDepartment_readOnly = Department.builder().id(ID_VALID_DEPARTMENT_READONLY).name(NAME_VALID_DEPARTMENT_READONLY).readOnly(true).build();
