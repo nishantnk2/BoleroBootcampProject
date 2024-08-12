@@ -16,29 +16,28 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService implements OperationService<Employee> {
+public class EmployeeServiceImpl implements OperationService<Employee> {
 
     @Autowired
     private EmployeeRepo employeeRepo;
-    
+
     @Autowired
     private DepartmentRepo departmentRepo;
 
     @Override
-    public Employee save(Employee obj) {
-        validateDepartmentsExistence(obj);
-        saveMandatoryDepartments(obj);
-        return employeeRepo.save(obj);
+    public Employee save(Employee employee) {
+        validateDepartmentsExistence(employee);
+        saveMandatoryDepartments(employee);
+        return employeeRepo.save(employee);
     }
 
     @Override
-    public Employee update(Employee obj) throws BadRequestException {
-        if(obj.getId() == null)
-        {
+    public Employee update(Employee employee) throws BadRequestException {
+        if (employee.getId() == null) {
             throw new BadRequestException("Employee id is required");
         }
-        employeeRepo.findById(obj.getId()).orElseThrow(() -> new NoSuchElementException("Employee id not found"));
-        return employeeRepo.save(obj);
+        employeeRepo.findById(employee.getId()).orElseThrow(() -> new NoSuchElementException("Employee id not found"));
+        return employeeRepo.save(employee);
     }
 
     @Override
@@ -50,7 +49,7 @@ public class EmployeeService implements OperationService<Employee> {
     @Override
     public List<Employee> getAll() throws CustomException {
         List<Employee> employees = employeeRepo.findAll();
-        if(employees.isEmpty()) {
+        if (employees.isEmpty()) {
             throw new CustomException("Employee list is empty.");
         }
         return employees;
@@ -61,19 +60,19 @@ public class EmployeeService implements OperationService<Employee> {
         return employeeRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Employee is not available"));
     }
 
-    private void saveMandatoryDepartments(Employee obj) {
-       obj.getDepartments().addAll(departmentRepo.getDepartmentsByMandatoryIsTrue());
+    private void saveMandatoryDepartments(Employee employee) {
+        employee.getDepartments().addAll(departmentRepo.getDepartmentsByMandatoryIsTrue());
     }
 
-    private void validateDepartmentsExistence(Employee obj) {
-        if(obj.getDepartments() == null) {
-            obj.setDepartments(new HashSet<>());
+    private void validateDepartmentsExistence(Employee employee) {
+        if (employee.getDepartments() == null) {
+            employee.setDepartments(new HashSet<>());
             return;
         }
 
-        List<Integer> departmentIds = obj.getDepartments().stream().map(Department::getId).toList();
-        List<Department> fetchedDepartments = departmentRepo.findAllById(departmentIds);
-        if(fetchedDepartments.size() != obj.getDepartments().size()) {
+        List<Integer> inputDepartmentIds = employee.getDepartments().stream().map(Department::getId).toList();
+        List<Department> dbDepartmentIds = departmentRepo.findAllById(inputDepartmentIds);
+        if (dbDepartmentIds.size() != employee.getDepartments().size()) {
             throw new NoSuchElementException("Department is not available");
         }
     }

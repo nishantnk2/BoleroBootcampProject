@@ -13,42 +13,37 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/employee")
 @Validated
-public class EmployeeController{
+public class EmployeeController {
 
     @Autowired
-    private final OperationService<Employee> employeeService;
+    private final OperationService<Employee> employeeServiceImpl;
 
-    public EmployeeController(OperationService<Employee> employeeService){
-        this.employeeService = employeeService;
+    public EmployeeController(OperationService<Employee> employeeServiceImpl) {
+        this.employeeServiceImpl = employeeServiceImpl;
     }
 
     @GetMapping("/getall")
     public List<Employee> getAllEmployees() throws CustomException {
-        return employeeService.getAll();
+        return employeeServiceImpl.getAll();
     }
 
     @GetMapping("/getbyid/{id}")
     public Employee getEmployeeById(@PathVariable Integer id) {
-        return employeeService.getById(id);
+        return employeeServiceImpl.getById(id);
     }
 
     @PostMapping("/add")
     public Employee saveEmployee(@RequestBody Employee employee) {
-        return employeeService.save(employee);
+        return employeeServiceImpl.save(employee);
     }
 
     @PostMapping("/update")
     public Employee updateEmployee(@RequestBody Employee newEmp) throws BadRequestException {
-        return employeeService.update(newEmp);
+        return employeeServiceImpl.update(newEmp);
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteEmployeeById(@PathVariable Integer id) throws BadRequestException {
-        employeeService.deleteById(id);
-    }
-
-    @GetMapping("/helloworld")
-    public String helloWorld() {
-        return "Hello World";
+        employeeServiceImpl.deleteById(id);
     }
 }

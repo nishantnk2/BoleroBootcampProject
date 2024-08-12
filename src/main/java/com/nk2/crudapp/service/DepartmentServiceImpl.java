@@ -12,38 +12,36 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
-public class DepartmentService implements OperationService<Department> {
+public class DepartmentServiceImpl implements OperationService<Department> {
 
     @Autowired
     private DepartmentRepo departmentRepo;
 
     @Override
-    public Department save(Department obj) {
-        return departmentRepo.save(obj);
+    public Department save(Department department) {
+        return departmentRepo.save(department);
     }
 
     @Override
-    public Department update(Department obj) throws BadRequestException {
-        Department dept = getById(obj.getId());
-        if(dept.isReadOnly() && obj.isReadOnly())
-        {
+    public Department update(Department department) throws BadRequestException {
+        Department dbDepartment = getById(department.getId());
+        if (department.isReadOnly() && dbDepartment.isReadOnly()) {
             throw new BadRequestException("Department is read-only. Can't update.");
         }
 
-        return departmentRepo.save(obj);
+        return departmentRepo.save(department);
     }
 
     @Override
     public void deleteById(Integer id) throws BadRequestException {
         Department department = departmentRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Department id is not available"));
 
-        if(department.isReadOnly())
-        {
+        if (department.isReadOnly()) {
             throw new BadRequestException("Department is read-only. Can't delete.");
         }
 
-        Set<Employee> employeeList = department.getEmployees();
-        for (Employee employee : employeeList) {
+        Set<Employee> employees = department.getEmployees();
+        for (Employee employee : employees) {
             employee.getDepartments().remove(department);
         }
         departmentRepo.deleteById(id);
@@ -52,7 +50,7 @@ public class DepartmentService implements OperationService<Department> {
     @Override
     public List<Department> getAll() {
         List<Department> departments = departmentRepo.findAll();
-        if(departments.isEmpty()) {
+        if (departments.isEmpty()) {
             throw new NoSuchElementException("Department list is empty.");
         }
         return departments;

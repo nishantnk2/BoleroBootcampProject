@@ -13,34 +13,34 @@ import java.util.List;
 @RequestMapping("/api/department")
 public class DepartmentController {
     @Autowired
-    private final OperationService<Department> departmentService;
+    private final OperationService<Department> departmentServiceImpl;
 
-    public DepartmentController(OperationService<Department> departmentService) {
-        this.departmentService = departmentService;
+    public DepartmentController(OperationService<Department> departmentServiceImpl) {
+        this.departmentServiceImpl = departmentServiceImpl;
     }
 
     @GetMapping("/getall")
     public List<Department> getAllDepartments() throws CustomException {
-        return departmentService.getAll();
+        return departmentServiceImpl.getAll();
     }
 
     @GetMapping("/getbyid/{id}")
     public Department getDepartmentById(@PathVariable Integer id) {
-        return departmentService.getById(id);
+        return departmentServiceImpl.getById(id);
     }
 
     @PostMapping("/add")
     public Department saveDepartment(@RequestBody Department department) {
-        return departmentService.save(department);
+        return departmentServiceImpl.save(department);
     }
 
     @PostMapping("/update")
     public Department updateDepartmentById(@RequestBody Department department) throws BadRequestException {
-        return departmentService.update(department);
+        return departmentServiceImpl.update(department);
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteDepartment(@PathVariable Integer id) throws BadRequestException {
-        departmentService.deleteById(id);
+        departmentServiceImpl.deleteById(id);
     }
 }

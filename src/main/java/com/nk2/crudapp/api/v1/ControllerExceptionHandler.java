@@ -14,22 +14,22 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 @ControllerAdvice
-public class ControllerExceptionHandler <T extends Exception> {
+public class ControllerExceptionHandler {
 
-    private final Map<Class<T>, HttpStatus> map = new HashMap<>();
+    private static final Map<Class<? extends Exception>, HttpStatus> map = new HashMap<>();
 
-    public ControllerExceptionHandler(){
-       map.put((Class<T>) NoSuchElementException.class, HttpStatus.NOT_FOUND);
-       map.put((Class<T>) BadRequestException.class, HttpStatus.BAD_REQUEST);
-       map.put((Class<T>) Exception.class, HttpStatus.INTERNAL_SERVER_ERROR);
-       map.put((Class<T>) NullPointerException.class, HttpStatus.INTERNAL_SERVER_ERROR);
-       map.put((Class<T>) IllegalArgumentException.class, HttpStatus.BAD_REQUEST);
-       map.put((Class<T>) NoResourceFoundException.class, HttpStatus.NOT_FOUND);
-       map.put((Class<T>) CustomException.class, HttpStatus.NOT_FOUND);
+    static {
+        map.put(NoSuchElementException.class, HttpStatus.NOT_FOUND);
+        map.put(BadRequestException.class, HttpStatus.BAD_REQUEST);
+        map.put(Exception.class, HttpStatus.INTERNAL_SERVER_ERROR);
+        map.put(NullPointerException.class, HttpStatus.INTERNAL_SERVER_ERROR);
+        map.put(IllegalArgumentException.class, HttpStatus.BAD_REQUEST);
+        map.put(NoResourceFoundException.class, HttpStatus.NOT_FOUND);
+        map.put(CustomException.class, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorMessage> handle(Exception ex){
+    public ResponseEntity<ErrorMessage> handle(Exception ex) {
         HttpStatus responseCode = map.get(ex.getClass());
         return new ResponseEntity<>(new ErrorMessage(ex.getMessage(), responseCode.value()), responseCode);
     }
